@@ -1,32 +1,33 @@
 package org.godotengine.godot;
 
+import android.app.Activity;
+import android.content.res.Resources;
+import android.graphics.Color;
+import android.os.Bundle;
+import android.provider.Settings;
+import android.util.Log;
+import android.util.TypedValue;
+import android.view.Gravity;
+import android.view.View;
+import android.view.ViewGroup.LayoutParams;
+import android.widget.FrameLayout;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
-
-import android.app.Activity;
-import android.widget.FrameLayout;
-import android.view.ViewGroup.LayoutParams;
-import android.provider.Settings;
-import android.graphics.Color;
-import android.util.Log;
 import java.util.Locale;
-import android.view.Gravity;
-import android.view.View;
-import android.os.Bundle;
 
 import com.applovin.adview.AppLovinAdView;
 import com.applovin.adview.AppLovinIncentivizedInterstitial;
 import com.applovin.adview.AppLovinInterstitialAd;
 import com.applovin.adview.AppLovinInterstitialAdDialog;
 import com.applovin.sdk.AppLovinAd;
-import com.applovin.sdk.AppLovinAdSize;
-import com.applovin.sdk.AppLovinSdk;
-import com.applovin.sdk.AppLovinAdDisplayListener;
-import com.applovin.sdk.AppLovinAdRewardListener;
-import com.applovin.sdk.AppLovinAdVideoPlaybackListener;
 import com.applovin.sdk.AppLovinAdClickListener;
+import com.applovin.sdk.AppLovinAdDisplayListener;
 import com.applovin.sdk.AppLovinAdLoadListener;
+import com.applovin.sdk.AppLovinAdRewardListener;
+import com.applovin.sdk.AppLovinAdSize;
+import com.applovin.sdk.AppLovinAdVideoPlaybackListener;
+import com.applovin.sdk.AppLovinSdk;
 
 public class GodotApplovin extends Godot.SingletonBase
 {
@@ -56,8 +57,7 @@ public class GodotApplovin extends Godot.SingletonBase
 	public void init(boolean ProductionMode) {
 
 		this.ProductionMode = ProductionMode;
-        if(!ProductionMode) sdk.getSettings().setVerboseLogging( true );
-        
+        //if(!ProductionMode) sdk.getSettings().setVerboseLogging( true );
         layout = (FrameLayout)activity.getWindow().getDecorView().getRootView();
 
         // Create instance of interstitial ad
@@ -366,9 +366,10 @@ public class GodotApplovin extends Godot.SingletonBase
 	{
         if(banners.containsKey(id)) {
             AppLovinAdView b = banners.get(id);
-            if(b != null)
-                return b.getSize().getWidth();
-            else
+            if(b != null) {
+                Resources r = activity.getResources();
+                return (int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, b.getSize().getWidth(), r.getDisplayMetrics());
+            } else
                 return 0;
         } else {
             return 0;
@@ -383,9 +384,10 @@ public class GodotApplovin extends Godot.SingletonBase
 	{
         if(banners.containsKey(id)) {
             AppLovinAdView b = banners.get(id);
-            if(b != null)
-                return b.getSize().getHeight();
-            else
+            if(b != null) {
+                Resources r = activity.getResources();
+                return (int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, b.getSize().getHeight(), r.getDisplayMetrics());
+            } else
                 return 0;
         } else {
             return 0;
