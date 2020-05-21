@@ -1,0 +1,11 @@
+[config]
+
+name="AppLovin"
+binary_type="remote"
+binary="ru.mobilap.godot:godot-applovin:+"
+
+[dependencies]
+
+local=[]
+remote=[]
+custom_maven_repos=["https://dl.bintray.com/mobilap/maven/"]

@@ -1,4 +1,4 @@
-package org.godotengine.godot;
+package ru.mobilap.applovin;
 
 import android.app.Activity;
 import android.content.res.Resources;
@@ -13,8 +13,15 @@ import android.view.ViewGroup.LayoutParams;
 import android.widget.FrameLayout;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
+import java.util.List;
 import java.util.HashMap;
 import java.util.Locale;
+
+import org.godotengine.godot.Godot;
+import org.godotengine.godot.GodotLib;
+import org.godotengine.godot.plugin.GodotPlugin;
+import org.godotengine.godot.plugin.SignalInfo;
 
 import com.applovin.adview.AppLovinAdView;
 import com.applovin.adview.AppLovinIncentivizedInterstitial;
@@ -32,9 +39,9 @@ import com.applovin.sdk.AppLovinSdkConfiguration;
 import com.applovin.sdk.AppLovinSdkSettings;
 import com.applovin.sdk.AppLovinPrivacySettings;
 
-public class GodotApplovin extends Godot.SingletonBase
+public class AppLovin extends GodotPlugin 
 {
-    private final String TAG = GodotApplovin.class.getName();
+    private final String TAG = AppLovin.class.getName();
     private Activity activity = null; // The main activity of the game
 
     private HashMap<String, View> zombieBanners = new HashMap<>();
@@ -480,31 +487,41 @@ public class GodotApplovin extends Godot.SingletonBase
 
     /* Definitions
      * ********************************************************************** */
-
-    /**
-     * Initilization Singleton
-     * @param Activity The main activity
-     */
-    static public Godot.SingletonBase initialize(Activity activity)
+    public AppLovin(Godot godot) 
     {
-        return new GodotApplovin(activity);
+        super(godot);
+        activity = godot;
     }
 
-    /**
-     * Constructor
-     * @param Activity Main activity
-     */
-    public GodotApplovin(Activity p_activity) {
-        registerClass("Applovin", new String[] {
-                "init", "isInited", "setUserId", "debugMediation", "isGdprApplies", "setGdprConsent", "setAgeRestricted", "setCCPAApplied",
-                // banner
-                "loadBanner", "showBanner", "hideBanner", "removeBanner", "getBannerWidth", "getBannerHeight",
-                "makeZombieBanner", "killZombieBanner",
-                // Interstitial
-                "loadInterstitial", "showInterstitial",
-                // Rewarded video
-                "loadRewardedVideo", "showRewardedVideo"
-            });
-        activity = p_activity;
+    @Override
+    public String getPluginName() {
+        return "AppLovin";
     }
+
+    @Override
+    public List<String> getPluginMethods() {
+        return Arrays.asList(
+                             "init", "isInited", "setUserId", "debugMediation", "isGdprApplies", "setGdprConsent", "setAgeRestricted", "setCCPAApplied",
+                             // banner
+                             "loadBanner", "showBanner", "hideBanner", "removeBanner", "getBannerWidth", "getBannerHeight",
+                             "makeZombieBanner", "killZombieBanner",
+                             // Interstitial
+                             "loadInterstitial", "showInterstitial",
+                             // Rewarded video
+                             "loadRewardedVideo", "showRewardedVideo"
+                             );
+    }
+
+    /*
+    @Override
+    public Set<SignalInfo> getPluginSignals() {
+        return Collections.singleton(loggedInSignal);
+    }
+    */
+
+    @Override
+    public View onMainCreateView(Activity activity) {
+        return null;
+    }
+
 }
