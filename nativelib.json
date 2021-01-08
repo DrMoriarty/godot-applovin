@@ -1,0 +1,26 @@
+{
+  "name": "applovin",
+  "description": "AppLovin plugin. Ad network for mobile applications.",
+  "version": "0.1.0",
+  "license": "MIT",
+  "url": "https://github.com/DrMoriarty/godot-applovin",
+  "dependencies": [
+  ],
+  "files": {
+    "scripts": "scripts"
+  },
+  "variables": {
+    "AppLovin/SdkKey": {
+      "info": "Set your App ID here"
+    }
+  },
+  "autoload": {
+    "applovin": "*res://scripts/applovin.gd"
+  },
+  "platform_android": {
+    "files": {
+      "android-plugin/AppLovin.gdap": "android/plugins/",
+      "android-plugin/build/outputs/aar/AppLovin.release.aar": "android/plugins/"
+    }
+  }
+}

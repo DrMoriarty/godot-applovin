@@ -1,8 +1,8 @@
 [config]
 
 name="AppLovin"
-binary_type="remote"
-binary="ru.mobilap.godot:godot-applovin:+"
+binary_type="local"
+binary="AppLovin.release.aar"
 
 [dependencies]
 
