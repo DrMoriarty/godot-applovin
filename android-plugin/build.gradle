@@ -49,7 +49,7 @@ dependencies {
      */
     compileOnly fileTree(dir: 'libs', include: ['godot-lib*.aar'])
     implementation ('com.google.android.gms:play-services-ads:18.3.0') { exclude group: 'com.android.support' }
-    implementation 'com.applovin:applovin-sdk:9.12.7'
+    implementation 'com.applovin:applovin-sdk:9.15.0'
 }
 
 group = 'ru.mobilap.godot'

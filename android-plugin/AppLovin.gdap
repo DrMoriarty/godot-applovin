@@ -7,5 +7,5 @@ binary="AppLovin.release.aar"
 [dependencies]
 
 local=[]
-remote=[]
-custom_maven_repos=["https://dl.bintray.com/mobilap/maven/"]
+remote=["com.applovin:applovin-sdk:9.15.0"]
+custom_maven_repos=[]

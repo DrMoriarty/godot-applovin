@@ -42,7 +42,6 @@ import com.applovin.sdk.AppLovinPrivacySettings;
 public class AppLovin extends GodotPlugin 
 {
     private final String TAG = AppLovin.class.getName();
-    private Activity activity = null; // The main activity of the game
 
     private HashMap<String, View> zombieBanners = new HashMap<>();
     private HashMap<String, FrameLayout.LayoutParams> bannerParams = new HashMap<>();
@@ -71,10 +70,10 @@ public class AppLovin extends GodotPlugin
 
         this.ProductionMode = ProductionMode;
         //if(!ProductionMode) sdk.getSettings().setVerboseLogging( true );
-        layout = (FrameLayout)activity.getWindow().getDecorView().getRootView();
+        layout = (FrameLayout)getActivity().getWindow().getDecorView().getRootView();
 
         Log.i(TAG, "Applovin sdk key: " + sdkKey);
-        sdk = AppLovinSdk.getInstance(sdkKey, new AppLovinSdkSettings(), activity);
+        sdk = AppLovinSdk.getInstance(sdkKey, new AppLovinSdkSettings(), getActivity());
         sdk.initializeSdk(new AppLovinSdk.SdkInitializationListener() {
                 @Override
                 public void onSdkInitialized(final AppLovinSdkConfiguration configuration)
@@ -99,7 +98,7 @@ public class AppLovin extends GodotPlugin
             });
 
         // Create instance of interstitial ad
-        interstitialAd = AppLovinInterstitialAd.create( sdk, activity );
+        interstitialAd = AppLovinInterstitialAd.create( sdk, getActivity() );
 
         // Optional: Set listeners
         interstitialAd.setAdDisplayListener(new AppLovinAdDisplayListener() {
@@ -150,15 +149,15 @@ public class AppLovin extends GodotPlugin
     }
 
     public void setGdprConsent(final boolean consent) {
-        AppLovinPrivacySettings.setHasUserConsent( consent, activity );
+        AppLovinPrivacySettings.setHasUserConsent( consent, getActivity() );
     }
 
     public void setAgeRestricted(final boolean ageRestricted) {
-        AppLovinPrivacySettings.setIsAgeRestrictedUser( ageRestricted, activity );
+        AppLovinPrivacySettings.setIsAgeRestrictedUser( ageRestricted, getActivity() );
     }
 
     public void setCCPAApplied(final boolean ccpaApplied) {
-        AppLovinPrivacySettings.setDoNotSell( ccpaApplied, activity );
+        AppLovinPrivacySettings.setDoNotSell( ccpaApplied, getActivity() );
     }
 
 
@@ -171,7 +170,7 @@ public class AppLovin extends GodotPlugin
      * @param String id AdMod Rewarded video ID
      */
     public void loadRewardedVideo(final String id, final int callback_id) {
-        activity.runOnUiThread(new Runnable() {
+        getActivity().runOnUiThread(new Runnable() {
                 @Override public void run() {
                     try {
                         callbacks.put(id, callback_id);
@@ -203,7 +202,7 @@ public class AppLovin extends GodotPlugin
      * Show a Rewarded Video
      */
     public void showRewardedVideo(final String id) {
-        activity.runOnUiThread(new Runnable() {
+        getActivity().runOnUiThread(new Runnable() {
                 @Override public void run() {
                     if(rewardeds.containsKey(id)) {
 
@@ -223,7 +222,7 @@ public class AppLovin extends GodotPlugin
                                         GodotLib.calldeferred(callback_id, "_on_rewarded_video_ad_closed", new Object[] { id });
                                     }
                                 };
-                            incentivizedInterstitial.show(activity, 
+                            incentivizedInterstitial.show(getActivity(), 
                                                           null, //<AppLovinAdRewardListener>, 
                                                           null, //<AppLovinAdVideoPlaybackListener>, 
                                                           displayListener, 
@@ -244,7 +243,7 @@ public class AppLovin extends GodotPlugin
     {
 
         // Create an ad view with a specific zone to load ads for
-        AppLovinAdView adView = new AppLovinAdView(sdk, AppLovinAdSize.BANNER, id, activity );
+        AppLovinAdView adView = new AppLovinAdView(sdk, AppLovinAdSize.BANNER, id, getActivity() );
 
         // Optional: Set listeners
         adView.setAdLoadListener( new AppLovinAdLoadListener() {
@@ -288,7 +287,7 @@ public class AppLovin extends GodotPlugin
      */
     public void loadBanner(final String id, final boolean isOnTop, final int callback_id)
     {
-        activity.runOnUiThread(new Runnable() {
+        getActivity().runOnUiThread(new Runnable() {
                 @Override public void run() {
                     if(!banners.containsKey(id)) {
                         AppLovinAdView adView = initBanner(id, isOnTop, callback_id);
@@ -307,7 +306,7 @@ public class AppLovin extends GodotPlugin
      */
     public void showBanner(final String id)
     {
-        activity.runOnUiThread(new Runnable() {
+        getActivity().runOnUiThread(new Runnable() {
                 @Override public void run() {
                     if(banners.containsKey(id)) {
                         AppLovinAdView b = banners.get(id);
@@ -333,7 +332,7 @@ public class AppLovin extends GodotPlugin
 
     public void removeBanner(final String id)
     {
-        activity.runOnUiThread(new Runnable() {
+        getActivity().runOnUiThread(new Runnable() {
                 @Override public void run() {
                     if(banners.containsKey(id)) {
                         AppLovinAdView b = banners.get(id);
@@ -352,7 +351,7 @@ public class AppLovin extends GodotPlugin
      */
     public void hideBanner(final String id)
     {
-        activity.runOnUiThread(new Runnable() {
+        getActivity().runOnUiThread(new Runnable() {
                 @Override public void run() {
                     if(banners.containsKey(id)) {
                         AppLovinAdView b = banners.get(id);
@@ -375,7 +374,7 @@ public class AppLovin extends GodotPlugin
         if(banners.containsKey(id)) {
             AppLovinAdView b = banners.get(id);
             if(b != null) {
-                Resources r = activity.getResources();
+                Resources r = getActivity().getResources();
                 return (int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, b.getSize().getWidth(), r.getDisplayMetrics());
             } else
                 return 0;
@@ -393,7 +392,7 @@ public class AppLovin extends GodotPlugin
         if(banners.containsKey(id)) {
             AppLovinAdView b = banners.get(id);
             if(b != null) {
-                Resources r = activity.getResources();
+                Resources r = getActivity().getResources();
                 return (int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, b.getSize().getHeight(), r.getDisplayMetrics());
             } else
                 return 0;
@@ -419,7 +418,7 @@ public class AppLovin extends GodotPlugin
 
     public void killZombieBanner(final String zid)
     {
-        activity.runOnUiThread(new Runnable() {
+        getActivity().runOnUiThread(new Runnable() {
                 @Override public void run() {
                     if (zombieBanners.containsKey(zid)) {
                         View z = zombieBanners.get(zid);
@@ -442,7 +441,7 @@ public class AppLovin extends GodotPlugin
      */
     public void loadInterstitial(final String id, final int callback_id)
     {
-        activity.runOnUiThread(new Runnable() {
+        getActivity().runOnUiThread(new Runnable() {
                 @Override public void run() {
                     // Load an ad for a given zone
                     callbacks.put(id, callback_id);
@@ -469,7 +468,7 @@ public class AppLovin extends GodotPlugin
      */
     public void showInterstitial(final String id)
     {
-        activity.runOnUiThread(new Runnable() {
+        getActivity().runOnUiThread(new Runnable() {
                 @Override public void run() {
                     if(interstitials.containsKey(id)) {
                         AppLovinAd interstitial = interstitials.get(id);
@@ -490,7 +489,6 @@ public class AppLovin extends GodotPlugin
     public AppLovin(Godot godot) 
     {
         super(godot);
-        activity = godot;
     }
 
     @Override
