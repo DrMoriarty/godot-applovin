@@ -1,9 +1,12 @@
 {
   "name": "applovin",
+  "display_name": "AppLovin",
   "description": "AppLovin plugin. Ad network for mobile applications.",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "license": "MIT",
   "url": "https://github.com/DrMoriarty/godot-applovin",
+  "godot_version": "3.3.0",
+  "category": "misc",
   "author": {
     "name": "DrMoriarty",
     "url": "https://github.com/DrMoriarty",
